@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>旋转木马轮播图</title>
+  <style>
+    /*初始化  reset*/
+    blockquote,
+    body,
+    button,
+    dd,
+    dl,
+    dt,
+    fieldset,
+    form,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    hr,
+    input,
+    legend,
+    li,
+    ol,
+    p,
+    pre,
+    td,
+    textarea,
+    th,
+    ul {
+      margin: 0;
+      padding: 0
+    }
+
+    body,
+    button,
+    input,
+    select,
+    textarea {
+      font: 12px/1.5 "Microsoft YaHei", "微软雅黑", SimSun, "宋体", sans-serif;
+      color: #666;
+    }
+
+    ol,
+    ul {
+      list-style: none
+    }
+
+    a {
+      text-decoration: none
+    }
+
+    fieldset,
+    img {
+      border: 0;
+      vertical-align: top;
+    }
+
+    a,
+    input,
+    button,
+    select,
+    textarea {
+      outline: none;
+    }
+
+    a,
+    button {
+      cursor: pointer;
+    }
+
+    .wrap {
+      width: 1200px;
+      margin: 100px auto;
+      border: 1px solid red;
+    }
+
+    .slide {
+      height: 500px;
+      position: relative;
+    }
+
+    .slide ul li {
+      position: absolute;
+      left: 200px;
+      top: 0;
+    }
+
+    .slide li img {
+      width: 100%;
+      /*让图片的大小和父盒子一样的大，要不然会出问题，会撑出父盒子*/
+    }
+
+    .slide ol {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      line-height: 20px;
+      text-align: center;
+    }
+
+    .slide ol li {
+      float: left;
+      width: 20px;
+      height: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      margin-left: 10px;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+
+    .slide ol li.current {
+      background-color: yellow;
+    }
+
+    .arrow {
+      display: none;
+    }
+
+    .prev,
+    .next {
+      width: 76px;
+      height: 112px;
+      position: absolute;
+      top: 50%;
+      margin-top: -56px;
+      /*background-color: red;*/
+      background: url('./images copy/prev.png') no-repeat;
+      z-index: 99;
+    }
+
+    .next {
+      right: 0;
+      background-image: url('./images copy/next.png');
+    }
+
+
+    .slide .one {
+      width: 400px;
+      top: 20px;
+      left: 50px;
+      opacity: 0.2;
+      z-index: 2
+    }
+
+    .slide .two {
+      width: 600px;
+      top: 70px;
+      left: 0px;
+      opacity: 0.8;
+      z-index: 3
+    }
+
+    .slide .three {
+      width: 800px;
+      top: 100px;
+      left: 200px;
+      opacity: 1;
+      z-index: 4
+    }
+
+    .slide .four {
+      width: 600px;
+      top: 70px;
+      left: 600px;
+      opacity: 0.8;
+      z-index: 3
+    }
+
+    .slide .five {
+      width: 400px;
+      top: 20px;
+      left: 750px;
+      opacity: 0.2;
+      z-index: 2
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap" id="wrap">
+    <div class="slide" id="slide">
+      <ul>
+        <li class="one"><a href="#"><img src="./images copy/bingbing.jpg" alt="" /></a></li>
+        <li class="two"><a href="#"><img src="./images copy/lingengxin.jpg" alt="" /></a></li>
+        <li class="three"><a href="#"><img src="./images copy/yuanyuan.png" alt="" /></a></li>
+        <li class="four"><a href="#"><img src="./images copy/slidepic4.jpg" alt="" /></a></li>
+        <li class="five"><a href="#"><img src="./images copy/slidepic5.jpg" alt="" /></a></li>
+      </ul>
+      <ol>
+        <li class="current">1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+      </ol>
+      <div class="arrow" id="arrow">
+        <a href="javascript:;" class="prev" id="arrLeft"></a>
+        <a href="javascript:;" class="next" id="arrRight"></a>
+      </div>
+    </div>
+  </div>
+  <script src="./jquery-1.12.4.js"></script>
+  <script>
+    var config = [
+      {
+        "width": 400,
+        "top": 20,
+        "left": 50,
+        "opacity": 0.2,
+        "zIndex": 2
+      },
+      {
+        "width": 600,
+        "top": 70,
+        "left": 0,
+        "opacity": 0.8,
+        "zIndex": 3
+      },
+      {
+        "width": 800,
+        "top": 100,
+        "left": 200,
+        "opacity": 1,
+        "zIndex": 4
+      },
+      {
+        "width": 600,
+        "top": 70,
+        "left": 600,
+        "opacity": 0.8,
+        "zIndex": 3
+      },
+      {
+        "width": 400,
+        "top": 20,
+        "left": 750,
+        "opacity": 0.2,
+        "zIndex": 2
+      }
+    ];
+    $(function () {
+      // 自動輪播 1.調用點擊事件
+      var timeID = setInterval(function () {
+        $('#arrRight').click();
+      }, 3000);
+      // 鼠標移入大盒子 1.清除定時器 2.左右箭頭顯示
+      $('#wrap').on('mouseover', function () {
+        $('#arrow').show();
+        clearInterval(timeID);
+        // 鼠標移出大盒子 1.左右箭頭隱藏 2.開啟定時器.
+      }).on('mouseout', function () {
+        $('#arrow').hide();
+        timeID = setInterval(function () {
+          $('#arrRight').click();
+        }, 3000);
+      });
+      // 全局變量
+      var index = 0;
+      // 右箭頭點擊事件
+      $('#arrRight').on('click', function () {
+        index == $('ol li').length - 1 ? index = 0 : index++;
+        $('ol li').eq(index).addClass('current').siblings('ol li').removeClass('current');
+        // 把最後一張放到第一張的位置上
+        config.unshift(config.pop());
+        for (var i = 0; i < config.length; i++) {
+          $('ul li').eq(i).animate(config[i]);
+        }
+      });
+      // 左箭頭點擊事件
+      $('#arrLeft').on('click', function () {
+        index == 0 ? index = $('ol li').length - 1 : index--;
+        $('ol li').eq(index).addClass('current').siblings('ol li').removeClass('current');
+        // 把第一張放到最後一張的位置上
+        config.push(config.shift());
+        for (var i = 0; i < config.length; i++) {
+          $('ul li').eq(i).animate(config[i]);
+        };
+      });
+      // 按鈕點擊事件
+      $('ol li').on('click', function () {
+        var x = $(this).index() - index;
+        if (x > 0) {
+          for (var i = x; i > 0; i--) {
+            $('#arrRight').click();
+          }
+        } else {
+          for (var i = x; i < 0; i++) {
+            $('#arrLeft').click();
+          }
+        }
+        $('ol li').eq(index).addClass('current').siblings('ol li').removeClass('current');
+      });
+    });
+  </script>
+</body>
+
+</html>
