@@ -25,11 +25,44 @@
                 <i class="iconfont icon-key"></i>
                 <input type="text" class="input_txt" placeholder="邮箱/手机号">
                 <input type="password" class="input_pass" placeholder="密码">
-                <input type="submit" class="input_sub" value="登 录">
+                <input type="button" class="input_sub" value="登 录">
             </form>
         </div>
 
-    </div> 
+    </div>
+    <script src="./js/jquery-1.12.4.min.js"></script>
+    <script>
+        $(function () {
+            $('.input_sub').click(function () {
+                var userName = $('.input_txt').val().replace(/ /g, '');
+                var userPwd = $('.input_pass').val().replace(/ /g, '');
+                $('input_txt').val(userName);
+                $('.input_pass').val(userPwd);
+                if (userName.length < 5) {
+                    $('input_txt').focus();
+                    alert('用户名长度必须>=5');
+                } else if (userPwd.length < 5) {
+                    $('input_pass').focus();
+                    alert('用户密码必须>=5');
+                } else {
+                    $.ajax({
+                        url: 'http://127.0.0.1:8080/admin/user/login',
+                        method: 'post',
+                        data: 'username=' + userName + '&password=' + userPwd,
+                        success: function (backData) {
+                            alert(backData.msg);
+                            if (backData.code == 200) {
+                                window.location = './index.html';
+                            } else {
+                                $('input_txt').focus();
+                            }
+                        }
+                    })
+                }
+            })
+        })
+
+    </script>
 
 </body>
 
