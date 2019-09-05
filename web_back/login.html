@@ -35,7 +35,6 @@
         </div>
 
     </div>
-    <!-- bootstrap 模态框 的 html 代码 -->
     <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -45,38 +44,25 @@
                         <h4 class="modal-title">系统提示</h4>
                     </div>
                     <div class="modal-body">
-                        <!-- 消息框内容区域 -->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
-                        <!-- <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button> -->
                     </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /bootstrap 模态框 的 html 代码  -->
+                </div>
+            </div>
+        </div>
     </body>
     <script>
     
-        /**
-         * @description: 模态框 显示 方法
-         * @param {String} msg - 要显示的内容
-         * @param {Function} func - 消息显示2秒后要执行的 回调函数
-         */
         function showModel(msg, func) {
             $('.modal-body').text(msg);
             $('#myModal').modal({ keyboard: true });
-    
-            // 如果 第二个参数 func 存在，并 为 函数类型，则启动 定时器
             if (func && func instanceof Function) {
-                // 启动 一次性 定时器，2秒后 执行 回调函数
                 setTimeout(func, 2000);
             }
         }
     
         var testPreventDefault = null;
-        // 登录业务思路：登录按钮  点击时 获取用户名和密码，异步提前交到 服务器对应的 登录接口
-        // 1.导入 jquery.js 文件
-        // 2.当 页面加载完成后，为登录按钮 添加 点击事件
         $(function () {
             $('.input_sub').click(function () {
                 var userName = $('.input_txt').val().replace(/ /g, '');
