@@ -24,41 +24,41 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">用户名称：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="inputEmail3" value="李思思">
+                        <input type="text" class="form-control" id="txtName" name="username" value="">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">昵称：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="inputEmail3" value="思思">
+                        <input type="text" class="form-control" id="txtNickName" name="nickname" value="">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">邮箱：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="inputEmail3" value="lisisi@126.com">
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">用户图标：</label>
-                    <div class="col-sm-10">
-                        <img src="images/2.jpg" alt="" class="user_pic">
-                        <input type="file" id="exampleInputFile">
+                        <input type="text" class="form-control" id="txtEmail" name="email" value="">
                     </div>
                 </div>
 
                 <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-2 control-label">密码：</label>
-                        <div class="col-sm-4">
-                            <input type="password" class="form-control" id="inputEmail3" value="12345678">
-                        </div>
+                    <label for="inputPassword3" class="col-sm-2 control-label">用户图标：</label>
+                    <div class="col-sm-10">
+                        <img src="images/2.jpg" id="headPic" alt="" class="user_pic">
+                        <input type="file"  id="upFile" name="userPic">
                     </div>
-               
-    
+                </div>
+
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">密码：</label>
+                    <div class="col-sm-4">
+                        <input type="password" class="form-control" id="txtPwd" name="password" value="">
+                    </div>
+                </div>
+
+
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">修改</button>
+                        <button type="button" class="btn btn-success">修改</button>
                     </div>
                 </div>
             </form>
@@ -66,5 +66,45 @@
     </div>
 
 </body>
+<script>
+    $(function () {
+        getUserData();
+    })
+    $('#upFile').change(function () {
+        var virPath = URL.createObjectURL(this.files[0]);
+        $('#headPic').attr('src', virPath);
+    });
+
+    function getUserData() {
+        $.ajax({
+            url: 'http://127.0.0.1:8080/admin/user/detail',
+            method: 'get',
+            success: function (backData) {
+                $('#txtName').val(backData.data.username);
+                $('#txtNickName').val(backData.data.nickname);
+                $('#txtPwd').val(backData.data.password);
+                $('#txtEmail').val(backData.data.email);
+                $('#headPic').attr('src', backData.data.userPic);
+            }
+        })
+    }
+
+    $('.btn-success').click(function () {
+        var fd = new FormData($('form')[0]);
+        $.ajax({
+            url: 'http://127.0.0.1:8080/admin/user/edit',
+            method: 'post',
+            data: fd,
+            contentType: false,
+            processData: false,
+            success: function (backData) {
+                if (backData.code == 200) {
+                    alert('修改成功！');
+                    window.parent.loadUserInfo();
+                }
+            }
+        });
+    });
+</script>
 
 </html>
