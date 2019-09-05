@@ -133,20 +133,14 @@
     </script>
 
     <script>
-        //1.业务目标：点击 退出 按钮，请求 退出接口，如果返回的数据code==200，则跳转到登录页面 login.html
-        //a.为 登出按钮 添加 点击事件 
         $('.icon-tuichu').parent().click(function () {
-            //a1.设置 模态框的 消息内容
             $('.modal-body').text('您确认要退出吗？');
-            //a2.显示 模态框
             $('#myModal').modal({
                 keyboard: true
             });
         });
 
-        //b.为 【模态框的 确认按钮】 添加 点击事件
         $('#btnOK').click(function () {
-            //c.异步请求 退出 接口 /admin/user/logout
             $.ajax({
                 url: 'http://127.0.0.1:8080/admin/user/logout',
                 method: 'post',
@@ -158,13 +152,9 @@
             });
         });
 
-        //2.业务目标：登录成功跳转到 index.html 页面后，需要 异步 将 登录用户的 信息 获取到，并设置到 index.html 页面对应的位置
-        //a.页面加载完毕后，发送 异步请求
         $(function () {
             loadUserInfo();
         })
-
-        //b.异步请求函数
         function loadUserInfo() {
             $.ajax({
                 url: 'http://127.0.0.1:8080/admin/user/info',
